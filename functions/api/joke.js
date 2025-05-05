@@ -1,11 +1,8 @@
 export async function onRequest(context) {
   try {
     const { request, env } = context;
-
-    // Read incoming request body
     const { joke_type, topic } = await request.json();
 
-    // Call OpenAI API
     const response = await fetch("https://api.openai.com/v1/completions", {
       method: "POST",
       headers: {
@@ -20,20 +17,13 @@ export async function onRequest(context) {
       })
     });
 
-    if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`);
-    }
-
     const data = await response.json();
-    const joke = data.choices?.[0]?.text?.trim() || "Sorry, no joke was generated.";
 
-    return new Response(JSON.stringify({ joke }), {
-      status: 200,
+    return new Response(JSON.stringify({ joke: data.choices?.[0]?.text?.trim() || "No joke found." }), {
       headers: { "Content-Type": "application/json" }
     });
-
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
+    return new Response(JSON.stringify({ error: err.message || "Error generating joke" }), {
       status: 500,
       headers: { "Content-Type": "application/json" }
     });

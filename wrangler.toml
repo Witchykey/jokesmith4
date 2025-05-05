@@ -1,14 +1,6 @@
 name = "jokesmith"
 compatibility_date = "2024-05-05"
 
-pages_build_output_dir = "."  # 💥 This line is required for Pages
+pages_build_output_dir = "."  # tells Cloudflare where to find static + _worker.js or /functions
 
-[build]
-command = ""
-
-[site]
-bucket = "./"
-entry-point = "."
-
-# Do NOT store secrets here in production!
-# Use `wrangler secret put OPENAI_API_KEY` instead
+# Don't add [site] or [build] in Pages projects!

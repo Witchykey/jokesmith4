@@ -1,15 +1,14 @@
 name = "jokesmith"
 compatibility_date = "2024-05-05"
 
-[site]
-bucket = "./"           # Your static files like index.html
-entry-point = "."        # Root of your project, includes /functions
+pages_build_output_dir = "."  # 💥 This line is required for Pages
 
 [build]
-command = ""             # No build step for plain HTML + JS
+command = ""
 
-# ❗ Do NOT put secrets directly here in production.
-# Instead, use: `wrangler secret put OPENAI_API_KEY`
-# The line below is just for documentation or local dev
-# [vars]
-# OPENAI_API_KEY = "sk-..."  ← Use this only for local quick testing
+[site]
+bucket = "./"
+entry-point = "."
+
+# Do NOT store secrets here in production!
+# Use `wrangler secret put OPENAI_API_KEY` instead

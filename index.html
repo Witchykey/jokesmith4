@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JokeSmith - AI Joke Generator</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="static/css/custom.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <i class="fas fa-laugh-squint me-2"></i>JokeSmith
+      </a>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="index.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="about.html">About</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-primary text-white">
+        <h2 class="card-title mb-0">
+          <i class="fas fa-magic me-2"></i>AI Joke Generator
+        </h2>
+      </div>
+      <div class="card-body">
+        <p class="lead mb-4">
+          Generate custom jokes using OpenAI's powerful language model. Select a joke type, enter a topic, and let the AI creativity flow!
+        </p>
+
+        <form id="jokeForm">
+          <div class="mb-3">
+            <label for="jokeType" class="form-label">Joke Type</label>
+            <select id="jokeType" class="form-select" required>
+              <option value="dad joke">Dad Joke</option>
+              <option value="pun">Pun</option>
+              <option value="one-liner">One-liner</option>
+              <option value="knock-knock">Knock Knock</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="topic" class="form-label">Topic</label>
+            <input type="text" id="topic" class="form-control" placeholder="e.g. bananas, AI, taxes..." required>
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary btn-lg" id="generateBtn">
+              Generate
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="loading-container d-none mt-4 text-center">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2">Generating your joke...</p>
+    </div>
+
+    <!-- Joke Output -->
+    <div id="jokeResult" class="joke-result card border-0 shadow-sm mt-4 d-none">
+      <div class="card-header bg-success text-white">
+        <h3 class="card-title mb-0">
+          <i class="fas fa-laugh-beam me-2"></i>Your Custom Joke
+        </h3>
+      </div>
+      <div class="card-body">
+        <div class="joke-content">
+          <p id="jokeText" class="fs-5"></p>
+        </div>
+        <div class="mt-3 d-flex justify-content-end">
+          <button id="copyBtn" class="btn btn-outline-secondary me-2" onclick="copyJoke()">
+            <i class="fas fa-copy me-1"></i> Copy
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row mt-5">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-lightbulb fs-1 text-warning mb-3"></i>
+            <h4>Endless Creativity</h4>
+            <p>AI-powered joke generation provides unlimited creative potential with personalized topics.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-laugh-squint fs-1 text-info mb-3"></i>
+            <h4>Multiple Joke Types</h4>
+            <p>Choose from a variety of joke formats including dad jokes, puns, one-liners, and more.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-share-alt fs-1 text-success mb-3"></i>
+            <h4>Easy Sharing</h4>
+            <p>Copy and share your favorite AI-generated jokes with friends on social media.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer mt-5 py-3 bg-dark">
+    <div class="container text-center">
+      <span class="text-muted">&copy; 2024 JokeSmith | Powered by OpenAI</span>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="static/js/script.js"></script>
+</body>
+</html>

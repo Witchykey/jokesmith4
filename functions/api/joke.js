@@ -2,21 +2,20 @@ export async function onRequest(context) {
   try {
     const { request, env } = context;
 
-    // Read incoming request body
-    const { joke_type, topic } = await request.json();
-
-    if (!joke_type || !topic) {
-      throw new Error("Joke type and topic are required");
-    }
-
+    // Verify API key exists
     if (!env.OPENAI_API_KEY) {
       throw new Error("OpenAI API key is not configured");
     }
 
-    // Create the prompt for OpenAI
-    const prompt = `Create a ${joke_type} about ${topic}. Make it family-friendly and clever.`;
+    // Read incoming request body
+    const { joke_type, topic } = await request.json();
 
-    // Call OpenAI API with GPT-4
+    // Validate input
+    if (!joke_type || !topic) {
+      throw new Error("Joke type and topic are required");
+    }
+
+    // Call OpenAI API using the chat completions endpoint
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -24,32 +23,26 @@ export async function onRequest(context) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "gpt-4",
+        model: "gpt-3.5-turbo",
         messages: [
           {
             "role": "system",
-            "content": "You are a witty, family-friendly joke writer skilled at creating various types of jokes."
+            "content": "You are a witty joke generator. Create family-friendly jokes."
           },
           {
             "role": "user",
-            "content": prompt
+            "content": `Tell me a ${joke_type} joke about ${topic}`
           }
         ],
-        max_tokens: 200
+        max_tokens: 150,
+        temperature: 0.8
       })
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      const errorMessage = error.error?.message || "Failed to fetch joke from OpenAI";
-      
-      // Handle specific error cases
-      if (errorMessage.includes("insufficient_quota") || errorMessage.includes("exceeded your current quota")) {
-        throw new Error("OpenAI API quota exceeded. Please check your OpenAI account billing details.");
-      } else if (errorMessage.toLowerCase().includes("rate limit")) {
-        throw new Error("Rate limit reached. Please try again in a few moments.");
-      }
-      throw new Error(errorMessage);
+      const errorData = await response.json().catch(() => ({}));
+      console.error('OpenAI API Error:', errorData);
+      throw new Error(`OpenAI API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
     }
 
     const data = await response.json();
@@ -59,18 +52,19 @@ export async function onRequest(context) {
       status: 200,
       headers: { 
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "*"  // Add CORS header
       }
     });
 
   } catch (err) {
+    console.error('Error:', err);
     return new Response(JSON.stringify({ 
       error: err.message || "An unexpected error occurred"
     }), {
       status: err.message.includes("required") ? 400 : 500,
       headers: { 
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
+        "Access-Control-Allow-Origin": "*"  // Add CORS header
       }
     });
   }
